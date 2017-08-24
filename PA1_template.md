@@ -1,13 +1,9 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## 0. Loading useful libraries
-```{r load_knitr, results = 'hide', message=FALSE}
+
+```r
 library(knitr)
 library(dplyr)
 library(magrittr)
@@ -16,7 +12,8 @@ opts_chunk$set(echo = TRUE)
 
 ## 1. Loading and preprocessing the data
 - Code:  
-```{r load_data}
+
+```r
 # 1.1 Load the data and store them into dataframe 'activity'
 #     Set the columns classes of the output directly inside the read.csv
 #     method
@@ -36,21 +33,38 @@ summary_activity <- summary(activity)
 head_activity <- head(activity)
 ```
 - Number of observations/ columns:  
-```{r echo = FALSE}
-dim_activity
+
+```
+## [1] 17568     3
 ```
 - Summary of the data set:  
-```{r echo = FALSE}
-summary_activity
+
+```
+##      steps             date              interval        
+##  Min.   :  0.00   Min.   :2012-10-01   Length:17568      
+##  1st Qu.:  0.00   1st Qu.:2012-10-16   Class :character  
+##  Median :  0.00   Median :2012-10-31   Mode  :character  
+##  Mean   : 37.38   Mean   :2012-10-31                     
+##  3rd Qu.: 12.00   3rd Qu.:2012-11-15                     
+##  Max.   :806.00   Max.   :2012-11-30                     
+##  NA's   :2304
 ```
 - Head of the data set:  
-```{r echo = FALSE}
-head_activity
+
+```
+##   steps       date interval
+## 1    NA 2012-10-01     0000
+## 2    NA 2012-10-01     0005
+## 3    NA 2012-10-01     0010
+## 4    NA 2012-10-01     0015
+## 5    NA 2012-10-01     0020
+## 6    NA 2012-10-01     0025
 ```
 
 ## 2. What is mean total number of steps taken per day?
 - Code:  
-```{r mean_per_day, fig.height = 6, fig.width = 10}
+
+```r
 # NB. For this part of the assignment, we can ignore the missing values in the
 # dataset
 # 2.1 Calculate the total number of steps taken per day
@@ -80,13 +94,16 @@ legend(17000,
        col = c('blue','red'))
 ```
 
-- Mean of the total number of steps taken per day: <span style="color:blue"><b>`r format(round(meanStepsPerDay, 2), dec = ',', nsmall = 2, big.mark = " ")`</b></span>
+![](PA1_template_files/figure-html/mean_per_day-1.png)<!-- -->
 
-- Median of the total number of steps taken per day: <span style="color:red"><b>`r format(round(medianStepsPerDay, 2), dec = ',', nsmall = 2, big.mark = " ")`</b></span>
+- Mean of the total number of steps taken per day: <span style="color:blue"><b>9 354,23</b></span>
+
+- Median of the total number of steps taken per day: <span style="color:red"><b>10 395,00</b></span>
 
 ## 3. What is the average daily activity pattern?
 - Code:  
-```{r daily_average, fig.height = 6, fig.width = 10}
+
+```r
 # 3.1 Make a time series plot (i.e. type = "l") of the 5-minute interval
 #     (x-axis) and the average number of steps taken, averaged across all
 #     days (y-axis)
@@ -118,12 +135,15 @@ abline(v = which(averageStepsPerDay$steps == max_steps), col = "red", lwd = 1)
 abline(h = max_steps, col = "red", lwd = 1)
 ```
 
-- The maximum number of steps, on average across all the days in the dataset, is: <span style="color:red"><b>`r format(round(max_steps, 2), dec = ',', nsmall = 2, big.mark = ' ')`</b></span>
-- It occurs at <span style="color:red"><b>`r substr(time_max_steps,1,2)`:`r substr(time_max_steps,3,4)`</b></span>
+![](PA1_template_files/figure-html/daily_average-1.png)<!-- -->
+
+- The maximum number of steps, on average across all the days in the dataset, is: <span style="color:red"><b>206,17</b></span>
+- It occurs at <span style="color:red"><b>08:35</b></span>
 
 ## 4. Imputing missing values
 - Code:  
-```{r missing_values, fig.height = 6, fig.width = 10}
+
+```r
 # NB. Note that there are a number of days/intervals where there are missing values
 # (coded as NA). The presence of missing days may introduce bias into some
 # calculations or summaries of the data.
@@ -173,21 +193,24 @@ legend(17000,
        col = c('blue','red'))
 ```
 
-- Total number of missing values in the dataset: <span style="color:blue"><b>`r format(nb_na, big.mark = " ")`</b></span>
+![](PA1_template_files/figure-html/missing_values-1.png)<!-- -->
+
+- Total number of missing values in the dataset: <span style="color:blue"><b>2 304</b></span>
 
 As a strategy for filling in all of the missing values in the dataset, I've chosen to use the mean for the corresponding 5-minute interval on the line containing 'NA'.
 
-- Mean of the total number of steps taken per day for the new dataset without missing value: <span style="color:blue"><b>`r format(round(big_meanStepsPerDay, 2), dec = ',', nsmall = 2, big.mark = " ")`</b></span>
+- Mean of the total number of steps taken per day for the new dataset without missing value: <span style="color:blue"><b>10 766,19</b></span>
 
-- Median of the total number of steps taken per day for the new dataset without missing value: <span style="color:red"><b>`r format(round(big_medianStepsPerDay, 2), dec = ',', nsmall = 2, big.mark = " ")`</b></span>
+- Median of the total number of steps taken per day for the new dataset without missing value: <span style="color:red"><b>10 766,19</b></span>
 
 <b><i>Do these values differ from the estimates from the first part of the assignment?</i></b>
 
-Yes, the values differ from the first part of the assignment. The mean has increased from <b>`r format(round(meanStepsPerDay, 2), dec = ',', nsmall = 2, big.mark = " ")`</b> to <b>`r format(round(big_meanStepsPerDay, 2), dec = ',', nsmall = 2, big.mark = " ")`</b>, ie: a difference of <b>`r format(round(big_meanStepsPerDay - meanStepsPerDay, 2), dec = ',', nsmall = 2, big.mark = " ")`</b> more steps in average per day. The median increased from <b>`r format(round(medianStepsPerDay, 2), dec = ',', nsmall = 2, big.mark = " ")`</b> to become equal to the mean, ie: <b>`r format(round(big_medianStepsPerDay, 2), dec = ',', nsmall = 2, big.mark = " ")`</b>.  
+Yes, the values differ from the first part of the assignment. The mean has increased from <b>9 354,23</b> to <b>10 766,19</b>, ie: a difference of <b>1 411,96</b> more steps in average per day. The median increased from <b>10 395,00</b> to become equal to the mean, ie: <b>10 766,19</b>.  
   
 To compare the 2 data sets (with na or not), I suggest to plot the 2 histograms near to each other.
 
-```{r compared_histograms, fig.height = 6, fig.width = 10}
+
+```r
 par(mfrow=c(1,2), mar = c(2,4,2,0))
 hist(totalStepsPerDay$steps,
      main = NA,
@@ -206,6 +229,8 @@ hist(big_totalStepsPerDay$steps,
      ylim = c(0,27))
 ```
 
+![](PA1_template_files/figure-html/compared_histograms-1.png)<!-- -->
+
 <center><p style="font-size:16px"><b>Total number of steps taken per day - Distribution per bin of 2500 steps</b>  
 Data recorded from 2012/10/01 to 2012/11/30</p></center>
   
@@ -215,7 +240,8 @@ In addition to the increase of mean and median, we can say that the distribution
 
 ## 5. Are there differences in activity patterns between weekdays and weekends?
 - Code:  
-```{r weekdays_weekend, fig.height = 6, fig.width = 10}
+
+```r
 # NB. For this part the 'weekdays()' function may be of some help here. Use the
 # dataset with the filled-in missing values for this part.
 # 5.1 Create a new factor variable in the dataset with two levels – “weekday” and
@@ -274,3 +300,5 @@ axis(1,
      col.axis = "blue",
      cex.axis = 0.75)
 ```
+
+![](PA1_template_files/figure-html/weekdays_weekend-1.png)<!-- -->
